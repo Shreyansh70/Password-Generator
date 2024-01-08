@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 
 function App() {
@@ -6,6 +6,7 @@ function App() {
   const [numAllowed, setNumAllowed] = useState(false);
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setPassword] = useState('');
+  const passwordInputRef = useRef(null);
   function generatePassword() {
     const allowedChars = [];
     allowedChars.push(...'abcdefghijklmnopqrstuvwxyz');
@@ -31,20 +32,29 @@ function App() {
 
   useEffect(() => {
     setPassword(generatePassword);
-  } , [length, numAllowed, charAllowed])
+  }, [length, numAllowed, charAllowed])
 
   return (
     <>
       <div className="flex flex-col items-center justify-between h-12 bg-gray-50 rounded-lg shadow-md p-4">
-        <div className="w-full">
+        <div className="flex items-center justify-between w-full">
           <input
             type="text"
             value={password}
+            ref={passwordInputRef}
             readOnly
             className="w-full bg-gray-200 text-center text-lg font-semibold text-gray-700 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-300 dark:focus:ring-blue-800"
           />
-        </div>
 
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(password)
+              passwordInputRef.current.select();}}
+            
+            className="w-20 h-10 bg-blue-500 text-white rounded-md text-center font-semibold flex items-center justify-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:bg-blue-700 dark:hover:bg-blue-800"
+          >Copy
+          </button>
+        </div>
         <div className="flex items-center space-x-4 mt-5">
 
           <div className='flex flex-col'>
